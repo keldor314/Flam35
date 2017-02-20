@@ -94,7 +94,7 @@ let parse commandLine =
         | "--help"::tail ->
             parse {acc with isHelp = true} tail
         | badCommand::tail ->
-            failwith ""
+            failwithf "Invalid command: %s" badCommand
         | _ ->
             acc
     let emptyCommands =
