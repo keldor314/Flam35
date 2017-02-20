@@ -2,5 +2,5 @@
 
 [<EntryPoint>]
 let main argv = 
-    printfn "%A" argv
+    let commands = CommandLine.parse (List.ofArray argv)
     0 // return an integer exit code
