@@ -5,8 +5,8 @@ let helpString =
 Flam35:
 
 Options:
-    (-renderFrame <input> <output> [-frameTime <time>])...
-    (-renderAnimation <input> <output> <frameCount> [-startTime <time>] [-stopTime <time>])...
+    (-renderFrame <input.flam35> <output.png> [-frameTime <time>])...
+    (-renderAnimation <input.flam35> <output.avi> <frameCount> [-startTime <time>] [-stopTime <time>])...
     (-convert <input.flam3> <output.flam35>)...
     -resolution <width> <height>
     -quality <quality>
@@ -82,7 +82,6 @@ let parse commandLine =
                     else (!i)::acc,commands
             let indices,tail = getDeviceIndices [] tail
             parse {acc with deviceList = Indices indices} tail
-
         | "-resolution"::x::y::tail ->
             parse {acc with resolution = (int x, int y)} tail
         | "-quality"::quality::tail ->
@@ -94,7 +93,8 @@ let parse commandLine =
         | "--help"::tail ->
             parse {acc with isHelp = true} tail
         | badCommand::tail ->
-            failwithf "Invalid command: %s" badCommand
+            let badCommands = List.reduce (fun state rhs -> state+" "+rhs) (badCommand::tail)
+            failwithf "Invalid commands from: %s" badCommand
         | _ ->
             acc
     let emptyCommands =
