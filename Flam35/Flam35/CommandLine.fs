@@ -1,26 +1,31 @@
 ﻿module CommandLine
 
 let helpString =
-    "
-Flam35:
+    "Flam35:
 
 Options:
-    (-renderFrame <input.flam35> <output.png> [-frameTime <time>])...
+    (-renderFrame <input.flam35> <output.png> [-keyframe <index>] [-frameTime <time>] [-frameTimeNormalized <time>])...
     (-renderAnimation <input.flam35> <output.avi> <frameCount> [-startTime <time>] [-stopTime <time>])...
     (-convert <input.flam3> <output.flam35>)...
     -resolution <width> <height>
     -quality <quality>
-    -devices (<index1> <index2>...)
+    -devices (<index1> <index2>)...
     --listDevices
     --verbose
     --help
+
 "
+
+type frame =
+    | FrameTime of float
+    | FrameTimeNormalized of float
+    | KeyFrame of int
 
 type command =
     | RenderFrame of
         input       : string *
         output      : string *
-        frameTime   : float
+        frame       : frame
     | RenderAnimation of
         input       : string *
         output      : string *
@@ -40,9 +45,9 @@ type commands = {
     deviceList  : deviceList
     resolution  : int*int
     quality     : float
+    verbose   : bool
+    help      : bool
     listDevices : bool
-    isVerbose   : bool
-    isHelp      : bool
 }
 
 let parse commandLine =
@@ -50,11 +55,17 @@ let parse commandLine =
         match commands with
         | "-renderFrame"::input::output::tail ->
             match tail with 
+            | "-keyframe"::frame::tail ->
+                let command = RenderFrame (input, output, KeyFrame <| int frame)
+                parse {acc with commands = command::acc.commands} tail
             | "-frameTime"::time::tail ->
-                let command = RenderFrame (input, output, float time)
+                let command = RenderFrame (input, output, FrameTime <| float time)
+                parse {acc with commands = command::acc.commands} tail
+            | "-frameTimeNormalized"::time::tail ->
+                let command = RenderFrame (input, output, FrameTimeNormalized <| float time)
                 parse {acc with commands = command::acc.commands} tail
             | _ ->
-                let command = RenderFrame (input,output, 0.0)
+                let command = RenderFrame (input,output, KeyFrame 0)
                 parse {acc with commands = command::acc.commands} tail 
         | "-renderAnimation"::input::output::frameCount::tail ->
             let rec getDuration commands duration =
@@ -79,7 +90,7 @@ let parse commandLine =
                     getDeviceIndices ((!i)::acc) tail
                 | _ ->
                     if acc.Length = 0 then failwith "No devices specified after -devices"
-                    else (!i)::acc,commands
+                    else acc,commands
             let indices,tail = getDeviceIndices [] tail
             parse {acc with deviceList = Indices indices} tail
         | "-resolution"::x::y::tail ->
@@ -89,9 +100,9 @@ let parse commandLine =
         | "--listDevices"::tail ->
             parse {acc with listDevices = true} tail
         | "--verbose"::tail ->
-            parse {acc with isVerbose = true} tail
+            parse {acc with verbose = true} tail
         | "--help"::tail ->
-            parse {acc with isHelp = true} tail
+            parse {acc with help = true} tail
         | badCommand::tail ->
             let badCommands = List.reduce (fun state rhs -> state+" "+rhs) (badCommand::tail)
             failwithf "Invalid commands from: %s" badCommand
@@ -104,7 +115,8 @@ let parse commandLine =
             quality = 1000.
             deviceList = All
             listDevices = false
-            isVerbose = false
-            isHelp = false
+            verbose = false
+            help = false
         }
-    parse emptyCommands commandLine
+    let commands = parse emptyCommands commandLine
+    {commands with commands = commands.commands |> List.rev}

@@ -38,6 +38,10 @@
       </chaos>
     </xform>
     <xform id=""/>
+    <postProcess>
+      <densityEstimation type="default"/>
+      <toneMap brightness="" gamma="" vibrancy=""/>
+    </postProcess>
     <code>
       <var name="" parameters=""/>
       <var name="" parameters=""/>
