@@ -45,8 +45,8 @@ type commands = {
     deviceList  : deviceList
     resolution  : int*int
     quality     : float
-    verbose   : bool
-    help      : bool
+    verbose     : bool
+    help        : bool
     listDevices : bool
 }
 
@@ -112,7 +112,7 @@ let parse commandLine =
         {
             commands = []
             resolution = (1920,1080)
-            quality = 1000.
+            quality = 5000.
             deviceList = All
             listDevices = false
             verbose = false

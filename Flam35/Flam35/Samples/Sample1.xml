@@ -1,13 +1,26 @@
 ﻿<Flam35>
-  <animation>
+  <include file=""/>
+  <animation duration="">
+    <cameraKeyframe id="">
+      <camera>
+        <lookAtSphereWithFov target="" direction="" radius="" up="" fov=""/>
+      </camera>
+    </cameraKeyframe>
     <keyframe id="" flame="" time=""/>
     <keyframe id="" flame="" time=""/>
     <transition start="" stop="">
-      <camera type="euler" interpolation="quintic" coefficients=""/>
+      <camera angleType="euler" positionType="linear" interpolation="quintic" coefficients=""/>
     </transition>
     <transition start="" stop="">
       <merge type="affine" interpolation="cubic" coefficients="">
-        <source id="" weight=""/>
+        <source id="" weight="">
+          <link>
+            <source>
+              <var name="" weight="" parameters=""/>
+            </source>
+            <target var="" index="1"/>
+          </link>
+        </source>
         <source id="" weight=""/>
         <source id="" weight=""/>
         <source id="" weight=""/>
@@ -29,27 +42,32 @@
     <camera>
       <lookAtSphere target="" position="" radius="" up=""/>
     </camera>
-    <xform id="">
+    <node id="" transformation="">
+      <node id="" weight="" opacity="" state=""/>
+      <node id="" weight="" opacity="" state=""/>
+      <node id="" weight="" opacity="" state=""/>
+    </node>
+    <transformation id="">
       <affine type="identity"/>
       <var name="" weight=""/>
-      <chaos>
-        <xform id="" weight="" opacity="" state=""/>
-        <xform id="" weight="" opacity="" state=""/>
-      </chaos>
-    </xform>
-    <xform id=""/>
+    </transformation>
+    <transformation id=""/>
     <postProcess>
       <densityEstimation type="default"/>
       <toneMap brightness="" gamma="" vibrancy=""/>
     </postProcess>
     <code>
-      <var name="" parameters=""/>
-      <var name="" parameters=""/>
+      <var id="" name="" parameters=""/>
+      <var id="" name="" parameters=""/>
     </code>
+    <palette format="plaintextRGB" normalized="true">
+      0 0 0
+      1 1 1
+    </palette>
   </flame>
   <flame id=""></flame>
   <code>
-    <var name="" parameters=""/>
-    <var name="" parameters=""/>
+    <var id="" name="" parameters=""/>
+    <var id="" name="" parameters=""/>
   </code>
 </Flam35>
