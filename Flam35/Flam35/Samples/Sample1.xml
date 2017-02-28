@@ -38,36 +38,195 @@
       </link>
     </transition>
   </animation>
-  <flame id="">
-    <camera>
-      <lookAtSphere target="" position="" radius="" up=""/>
+  <flame id="flame1">
+    <camera type="2D">
+      <lookAtCircle target="0 0" radius="1.6" up="0 1"/>
     </camera>
-    <node id="" transformation="">
-      <node id="" weight="" opacity="" state=""/>
-      <node id="" weight="" opacity="" state=""/>
-      <node id="" weight="" opacity="" state=""/>
-    </node>
-    <transformation id="">
-      <affine type="identity"/>
-      <var name="" weight=""/>
-    </transformation>
-    <transformation id=""/>
+    <nodes>
+      <node1 transformation=""/>
+      <node2 transformation=""/>
+      <node3pre transformation=""/>
+      <node3 transformation=""/>
+      <node3post transformation=""/>
+      <node4pre transformation=""/>
+      <node4 transformation=""/>
+      <node4post transformation=""/>
+      <node5 transformation=""/>
+      <node6 transformation=""/>
+      <finalXform transformation=""/>
+    </nodes>
+    <transformations>
+      <xform1>
+        <affine type="2D affine">
+          0.895958  -0.341487 0
+          0.341487  0.895958  0
+        </affine>
+        <vars>
+          <splits weight="1" x="0" y="0.1"/>
+        </vars>
+      </xform1>
+      <xform2>
+        <vars>
+          <splits weight="1" x="0" y="0.1"/>
+        </vars>
+      </xform2>
+      <xform3pre>
+        <vars>
+          <gaussian_blur weight="0.5"/>
+        </vars>
+      </xform3pre>
+      <xform3>
+        <vars>
+          <cylinder weight="0.03"/>
+          <gaussian_blur weight="0.005"/>
+        </vars>
+      </xform3>
+      <xform3post>
+        <affine type="2D affine">
+          0         -50 -0.65
+          2.618642  0   0
+        </affine>
+      </xform3post>
+      <xform4pre>
+        <affine type="2D affine">
+          0 -1 0
+          1  0 0
+        </affine>
+        <vars>
+          <gaussian_blur weight="0.5"/>
+        </vars>
+      </xform4pre>
+      <xform4>
+        <vars>
+          <cylinder weight="0.03"/>
+          <gaussian_blur weight="0.005"/>
+        </vars>
+      </xform4>
+      <xform4post>
+        <affine type="2D affine">
+          0         -50 0.65
+          2.618642  0   0
+        </affine>
+      </xform4post>
+      <xform5>
+        <affine type="2D affine">
+          0  1 0
+          -1 0 0
+        </affine>
+        <vars>
+          <blur_pixelize weight="1" size="0.1" scale="0.9"/>
+        </vars>
+      </xform5>
+      <xform6>
+        <affine type="2D affine">
+          0.822716 0        0
+          0        0.822716 0
+        </affine>
+        <vars>
+          <blur_pixelize weight="1" size="0.1" scale="0.9"/>
+        </vars>
+      </xform6>
+      <finalXform>
+        <affine type="2D affine">
+          -0.702026 -0.941568 0
+          0.941568  -0.702026 0
+        </affine>
+        <vars>
+          <bipolar weight="2" shift="1"/>
+        </vars>
+      </finalXform>
+    </transformations>
     <postProcess>
       <densityEstimation type="default"/>
-      <toneMap brightness="" gamma="" vibrancy=""/>
+      <toneMap brightness="10" gamma="4" vibrancy="1"/>
     </postProcess>
     <code>
-      <var id="" name="" parameters=""/>
-      <var id="" name="" parameters=""/>
+      <var name="" parameters=""/>
+      <var name="" parameters=""/>
     </code>
-    <palette format="plaintextRGB" normalized="true">
-      0 0 0
-      1 1 1
+    <palette format="plaintextRGB" normalized="false">
+      227 135 221     223 124 218     223 121 196     223 117 174     225 111 172     227 105 170     222 124 165     215 133 159
+      207 141 153     202 157 165     197 173 177     179 185 190     161 197 202     152 181 206     143 166 219     119 162 224
+      115 155 224     111 148 224     112 147 230     113 145 235     111 162 232     108 179 228     120 185 231     120 183 221
+      119 180 210     123 159 187     126 138 163     128 111 162     130 83  160     146 48  147     139 34  151     136 39  169
+      144 43  179     152 47  189     145 52  198     137 56  206     129 55  197     120 53  187     119 37  178     121 41  178
+      123 45  177     128 52  172     133 58  167     142 70  178     151 82  188     147 108 212     150 105 219     152 101 226
+      154 102 229     155 103 232     145 100 225     134 97  217     137 91  197     139 84  177     156 89  133     164 85  131
+      172 81  128     186 80  138     199 78  148     186 86  151     172 94  153     165 105 154     154 106 149     137 101 126
+      121 97  86      140 94  57      153 88  35      158 76  29      169 68  25      183 68  28      177 77  25      164 77  30
+      154 72  40      156 66  48      148 65  44      140 56  39      129 47  41      120 39  55      109 40  63      104 44  78
+      100 47  89      97  51  118     92  57  140     93  68  175     96  79  191     104 88  205     106 88  208     107 78  215
+      101 69  205     97  62  186     91  60  154     90  50  132     75  34  104     61  20  80      52  18  54      63  20  39
+      72  17  25      76  14  16      82  17  12      96  24  12      112 34  14      121 54  18      123 87  20      133 117 19
+      158 141 28      175 161 40      173 183 61      168 206 73      186 215 95      207 202 103     215 171 111     205 148 110
+      199 127 115     193 104 115     185 73  111     176 49  106     166 29  102     160 25  108     148 29  120     133 44  140
+      115 57  149     110 78  151     102 104 145     85  107 129     68  100 112     65  90  92      72  100 81      65  88  70
+      56  81  73      60  78  80      79  94  98      87  103 122     82  108 137     77  113 152     50  116 202     48  104 213
+      45  94  219     35  81  227     30  62  221     32  44  207     31  35  188     31  42  159     31  44  127     46  48  95
+      59  48  81      72  66  67      84  87  60      98  118 62      109 131 71      120 144 79      132 189 119     126 198 131
+      126 196 127     124 185 120     126 167 114     132 154 109     137 141 104     167 91  64      180 89  58      200 91  57
+      209 84  43      213 84  33      205 100 32      202 121 32      201 128 30      199 135 28      202 135 22      210 155 25
+      215 175 33      222 169 52      224 148 65      222 148 66      219 147 66      189 152 73      178 133 92      158 134 96
+      133 148 87      105 168 77      106 174 79      107 179 80      115 193 77      122 206 74      140 188 67      164 173 77
+      195 160 76      198 131 69      207 100 70      208 88  73      208 75  76      202 57  73      188 50  70      167 49  76
+      154 52  90      148 59  106     148 64  116     147 69  126     136 84  149     125 98  171     112 100 198     106 105 210
+      92  113 221     77  117 225     65  111 221     64  104 220     63  97  218     55  93  202     42  91  190     34  78  186
+      31  59  177     34  50  167     32  46  162     29  41  157     32  34  164     34  26  171     53  28  198     69  39  209
+      82  62  217     94  74  220     106 85  222     120 91  219     134 97  215     153 109 180     147 94  162     143 77  139
+      130 63  124     119 60  104     111 55  102     102 50  99      88  60  111     74  69  123     52  86  154     51  91  163
+      49  103 184     49  109 193     49  114 202     47  124 199     45  134 196     56  155 176     74  176 160     98  186 148
+      107 185 140     116 184 132     141 171 128     165 158 123     169 138 132     173 117 140     196 124 169     204 134 181
+      205 145 190     205 151 196     204 156 201     215 165 218     225 174 235     230 176 224     227 169 218     230 145 224
     </palette>
   </flame>
   <flame id=""></flame>
   <code>
-    <var id="" name="" parameters=""/>
-    <var id="" name="" parameters=""/>
+    <var name="" parameters=""/>
+    <var name="" parameters=""/>
   </code>
+  <meta>  <!--meta is ignored by the parser.  Use for embedding information.-->
+    <flame name="smoothness Mosaic 2.3" version="Apophysis 2.08 beta 2" size="2560 2048" center="0 0" scale="640" angle="1.5707963267949" rotate="-90.0000000000002" oversample="1" filter="0.5" quality="50" background="0 0 0" brightness="10" gamma="4" >
+      <xform weight="100" color="0.7" symmetry="0.937" splits="1" coefs="0.895958 0.341487 -0.341487 0.895958 0 0" splits_x="0" splits_y="0.1" chaos="1 0 1 1 0 0 " />
+      <xform weight="100" color="0.738" symmetry="0.95" splits="1" coefs="1 0 0 1 0 0" splits_x="0" splits_y="0.1" chaos="0 1 1 1 0 0 " plotmode="off" />
+      <xform weight="5" color="0.575" cylinder="0.03" gaussian_blur="0.005" pre_blur="0.5" coefs="1 0 0 1 0 0" post="0 2.618642 -50 0 -0.65 0" chaos="0 0 0 0 0 1" plotmode="off" />
+      <xform weight="5" color="0.575" cylinder="0.03" gaussian_blur="0.005" pre_blur="0.5" coefs="0 1 -1 0 0 0" post="0 2.618642 -50 0 0.65 0" chaos="0 0 0 0 1 0 " plotmode="off" />
+      <xform weight="1" color="0" symmetry="1" blur_pixelize="1" coefs="0 -1 1 0 0 0" blur_pixelize_size="0.1" blur_pixelize_scale="0.9" chaos="0 0 1 0 0 0 " plotmode="off" />
+      <xform weight="0.5" color="0.974" symmetry="1" blur_pixelize="1" coefs="0.822716 0 0 0.822716 0 0" blur_pixelize_size="0.1" blur_pixelize_scale="0.9" chaos="1 1 0 1 0 0 " />
+      <finalxform color="0" symmetry="1" bipolar="2" coefs="-0.702026 0.941568 -0.941568 -0.702026 0 0" bipolar_shift="1" />
+      <palette count="256" format="RGB">
+        E387DDDF7CDADF79C4DF75AEE16FACE369AADE7CA5D7859F
+        CF8D99CA9DA5C5ADB1B3B9BEA1C5CA98B5CE8FA6DB77A2E0
+        739BE06F94E07093E67191EB6FA2E86CB3E478B9E778B7DD
+        77B4D27B9FBB7E8AA3806FA28253A09230938B22978827A9
+        902BB3982FBD9134C68938CE8137C57835BB7725B27929B2
+        7B2DB18034AC853AA78E46B29752BC936CD49669DB9865E2
+        9A66E59B67E89164E18661D9895BC58B54B19C5985A45583
+        AC5180BA508AC74E94BA5697AC5E99A5699A9A6A9589657E
+        7961568C5E399958239E4C1DA94419B7441CB14D19A44D1E
+        9A48289C423094412C8C3827812F297827376D283F682C4E
+        642F596133765C398C5D44AF604FBF6858CD6A58D06B4ED7
+        6545CD613EBA5B3C9A5A32844B22683D14503412363F1427
+        4811194C0E1052110C60180C70220E7936127B5714857513
+        9E8D1CAFA128ADB73DA8CE49BAD75FCFCA67D7AB6FCD946E
+        C77F73C16873B9496FB0316AA61D66A0196C941D78852C8C
+        7339956E4E97666891556B81446470415A5C486451415846
+        3851493C4E504F5E6257677A526C894D71983274CA3068D5
+        2D5EDB2351E31E3EDD202CCF1F23BC1F2A9F1F2C7F2E305F
+        3B305148424354573C62763E6D834778904F84BD777EC683
+        7EC47F7CB9787EA772849A6D898D68A75B40B4593AC85B39
+        D1542BD55421CD6420CA7920C9801EC7871CCA8716D29B19
+        D7AF21DEA934E09441DE9442DB9342BD9849B2855C9E8660
+        85945769A84D6AAE4F6BB35073C14D7ACE4A8CBC43A4AD4D
+        C3A04CC68345CF6446D05849D04B4CCA3949BC3246A7314C
+        9A345A943B6A94407493457E8854957D62AB7064C66A69D2
+        5C71DD4D75E1416FDD4068DC3F61DA375DCA2A5BBE224EBA
+        1F3BB12232A7202EA21D299D2022A4221AAB351CC64527D1
+        523ED95E4ADC6A55DE785BDB8661D7996DB4935EA28F4D8B
+        823F7C773C686F3766663263583C6F4A457B34569A335BA3
+        3167B8316DC13172CA2F7CC72D86C4389BB04AB0A062BA94
+        6BB98C74B8848DAB80A59E7BA98A84AD758CC47CA9CC86B5
+        CD91BECD97C4CC9CC9D7A5DAE1AEEBE6B0E0E3A9DAE691E0
+      </palette>
+    </flame>
+  </meta>
 </Flam35>
