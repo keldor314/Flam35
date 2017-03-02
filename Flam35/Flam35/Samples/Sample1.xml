@@ -132,7 +132,7 @@
           <finalNode/>
         </noPool>
         <continue>
-          <xform3/>>
+          <xform3/>
         </continue>
       </node5>
       <node6 transformation="xform6" opacity="0" colorIndex="0.974" colorSpeed="0.0">
