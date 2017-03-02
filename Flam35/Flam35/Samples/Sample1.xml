@@ -1,50 +1,25 @@
 ﻿<Flam35>
   <include file=""/>
-  <animation duration="">
-    <cameraKeyframe id="">
-      <camera>
-        <lookAtSphereWithFov target="" direction="" radius="" up="" fov=""/>
+  <animation duration="1">
+    <keyframe id="keyframe1" flame="flame1" time="0"/>
+    <keyframe id="keyframe2" flame="flame2" time="1"/>
+    <transition start="keyframe1" stop="keyframe2">
+      <camera type="2D">
+        <interpolation coordinateSystem="linear">
+          <cubic s0="0" s1="0"/>
+        </interpolation>
       </camera>
-    </cameraKeyframe>
-    <keyframe id="" flame="" time=""/>
-    <keyframe id="" flame="" time=""/>
-    <transition start="" stop="">
-      <camera angleType="euler" positionType="linear" interpolation="quintic" coefficients=""/>
     </transition>
-    <transition start="" stop="">
-      <merge type="affine" interpolation="cubic" coefficients="">
-        <source id="" weight="">
-          <link>
-            <source>
-              <var name="" weight="" parameters=""/>
-            </source>
-            <target var="" index="1"/>
-          </link>
-        </source>
-        <source id="" weight=""/>
-        <source id="" weight=""/>
-        <source id="" weight=""/>
-        <target id=""/>
-      </merge>
-      <split type="cylindrical" interpolation="linear">
-        <source id=""/>
-        <target id="" weight=""/>
-        <target id="" weight=""/>
-        <target id="" weight=""/>
-      </split>
-      <link type="spherical" interpolation="quintic" coefficients="">
-        <source id=""/>
-        <target id="identity"/>
-      </link>
+    <transition start="keyframe1" stop="keyframe2" type="2D"> <!--Implicitly match members by name, may be overridden.  Child overrides take priority over parrent overrides.  Unmatched members are linked to the identity-->
+      <interpolation coordinateSystem="linear">
+        <cubic s0="0" s1="0"/>
+      </interpolation>
     </transition>
   </animation>
   <flame id="flame1">
     <camera type="2D">
       <lookAtCircle target="0 0" radius="1.6" up="0 1"/>
     </camera>
-    <states>
-      <base/>
-    </states>
     <nodes>
       <node1 transformation="xform1" opacity="0" colorIndex="0.7" colorSpeed="0.0315">
         <state>
@@ -278,6 +253,108 @@
       205 145 190     205 151 196     204 156 201     215 165 218     225 174 235     230 176 224     227 169 218     230 145 224
     </palette>
   </flame>
+  <flame id="flame2">
+    <camera type="2D">
+      <lookAtCircle target="-0.0270833333333333 0.0039583333333304" radius ="1.25" up="0 1"/>
+    </camera>
+    <nodes>
+      <node1 transformaiton="xform1" opacity="0" colorIndex="0" colorSpeed=".5">
+        <state>
+          <store slot="base">
+            <opacity value="1"/>
+          </store>
+        </state>
+        <noPool>
+          <finalNode/>>
+        </noPool>
+        <continue>
+          <node1 weight=".5"/>
+          <node2 weight=".5"/>
+        </continue>
+      </node1>
+      <node2 transformation="xform2" opacity="0" colorIndex=".052" colorSpeed=".5">
+        <state>
+          <store slot="base">
+            <opacity value="1"/>
+          </store>
+        </state>
+        <noPool>
+          <finalNode/>>
+        </noPool>
+        <continue>
+          <node1 weight=".5"/>
+          <node2 weight=".5"/>
+        </continue>
+      </node2>
+      <finalnode transformation="finalxform" opacity="base">
+        <return state="base"/>
+      </finalnode>
+    </nodes>
+    <transformaitons>
+      <xform1>
+        <vars>
+          <spherical weight="1"/>
+        </vars>
+      </xform1>
+      <xform2>
+        <affine type="2D affine">
+          -0.975334 0.17621   -0.151573
+          -0.17621  -0.975332 0.134938
+        </affine>
+        <vars>
+          <spherical weight="1"/>
+        </vars>
+      </xform2>
+      <finalxform>
+        <affine type="2D affine">
+          -0.599129 -0.519974 -0.876961
+          0.519974  -0.599125 -0.578836
+        </affine>
+        <vars>
+          <bubble weight="1"/>
+        </vars>
+      </finalxform>
+    </transformaitons>
+    <postProcess>
+      <densityEstimation type="default"/>
+      <toneMap brightness ="4" gamma="3" vibrancy="1"/>
+    </postProcess>
+    <code></code>
+    <palette format="plaintextRGB" normalized="false">
+      141 75  40      160 81  51      192 113 47      240 130 51      244 139 58      255 140 47      255 138 59      254 129 62
+      254 129 62      252 127 63      250 114 66      250 119 67      252 128 76      250 131 73      247 131 72      245 130 65
+      248 135 67      255 146 71      253 138 71      246 135 79      240 142 79      185 129 102     125 113 149     74  117 162
+      47  131 168     30  127 170     17  112 168     0   106 156     13  109 151     23  105 145     24  103 142     28  100 138
+      28  99  141     27  100 143     23  105 143     25  108 148     25  108 150     23  106 150     24  105 150     16  95  151
+      21  102 145     25  104 147     24  108 152     22  113 157     20  116 164     19  116 161     27  110 152     26  100 139
+      24  92  131     28  83  122     30  83  117     29  84  115     34  82  118     34  79  118     33  79  115     33  78  117
+      29  78  121     26  79  119     27  82  121     22  79  124     24  87  131     28  95  138     27  100 145     29  103 148
+      32  107 149     33  100 142     29  92  133     33  79  128     36  79  122     42  71  103     100 82  104     99  91  106
+      87  85  98      57  68  113     41  78  105     41  81  106     30  87  117     31  89  126     34  92  130     27  92  134
+      21  100 141     12  115 148     12  114 162     12  130 178     20  133 175     26  128 168     31  125 163     39  113 158
+      35  108 153     28  101 144     24  97  140     21  96  136     22  97  129     36  100 135     41  114 133     41  110 152
+      43  122 165     40  122 169     39  124 165     28  124 164     25  124 165     32  116 160     26  105 146     26  91  133
+      28  83  122     30  83  117     31  83  122     36  82  131     48  98  125     96  112 102     209 130 91      235 135 111
+      246 158 120     244 148 98      254 128 87      255 127 69      246 123 66      188 110 61      158 79  46      93  77  78
+      52  68  91      34  81  111     30  92  129     33  101 136     31  98  140     36  99  143     42  102 136     34  86  126
+      34  73  116     34  72  111     35  75  110     35  75  110     45  75  109     55  86  117     80  85  107     88  95  113
+      85  99  134     61  126 168     54  128 165     47  107 157     54  107 151     39  109 143     37  106 147     27  105 153
+      28  112 158     21  119 166     22  122 171     23  124 170     25  125 174     26  133 177     25  134 177     32  133 179
+      31  133 181     36  138 187     46  142 192     33  142 183     27  138 183     15  133 173     7   138 158     18  119 163
+      20  119 160     29  110 155     27  104 146     26  97  139     28  91  135     28  86  132     31  84  126     28  88  125
+      25  93  128     21  90  131     22  94  132     21  95  134     17  97  134     0   97  120     24  89  121     23  87  115
+      22  86  114     24  83  115     37  79  119     81  105 115     139 102 86      206 122 88      246 132 82      245 135 72
+      254 141 63      255 149 67      255 154 72      248 145 68      229 137 64      170 114 87      106 86  87      83  83  95
+      32  75  107     30  78  116     31  79  115     44  86  126     34  82  118     34  79  118     111 101 100     157 100 91
+      209 132 90      243 146 77      252 149 74      251 148 82      246 146 87      217 129 89      182 91  64      156 79  73
+      90  79  87      46  74  98      36  73  100     25  79  105     23  78  109     21  75  109     29  74  107     36  70  105
+      56  62  110     105 82  98      145 100 95      191 97  95      227 120 104     250 128 87      250 142 95      238 129 96
+      183 100 82      133 90  81      103 72  90      69  82  99      40  77  103     39  75  107     39  72  103     40  71  102
+      47  66  98      43  62  92      22  32  34      49  48  43      88  44  43      100 40  32      130 85  56      116 75  71
+      90  67  87      46  65  97      39  65  98      32  71  104     29  75  108     31  77  111     27  79  116     26  80  116
+      22  82  119     21  81  118     25  79  117     29  76  106     34  69  99      42  68  93      67  88  55      86  47  52
+    </palette>
+  </flame>
   <code>
     <var name="" parameters=""/>
     <var name="" parameters=""/>
@@ -324,6 +401,45 @@
         3167B8316DC13172CA2F7CC72D86C4389BB04AB0A062BA94
         6BB98C74B8848DAB80A59E7BA98A84AD758CC47CA9CC86B5
         CD91BECD97C4CC9CC9D7A5DAE1AEEBE6B0E0E3A9DAE691E0
+      </palette>
+    </flame>
+    <flame name="ImpossibleSphere" version="Apophysis 2.08 JK" size="800 800" center="-0.0270833333333333 0.0039583333333304" scale="320" oversample="1" filter="0.5" quality="50" background="0 0 0" brightness="4" gamma="3" >
+      <xform weight="0.5" color="0" spherical="1" coefs="1 0 0 1 0 0" />
+      <xform weight="0.5" color="0.052" spherical="0.25" coefs="-0.975334 -0.17621 0.17621 -0.975332 -0.151573 0.134938" />
+      <finalxform color="0" symmetry="1" bubble="1" coefs="-0.599129 0.519974 -0.519974 -0.599125 -0.876961 -0.578836" />
+      <palette count="256" format="RGB">
+        8D4B28A05133C0712FF08233F48B3AFF8C2FFF8A3BFE813E
+        FE813EFC7F3FFA7242FA7743FC804CFA8349F78348F58241
+        F88743FF9247FD8A47F6874FF08E4FB981667D71954A75A2
+        2F83A81E7FAA1170A8006A9C0D6D9717699118678E1C648A
+        1C638D1B648F17698F196C94196C96176A96186996105F97
+        156691196893186C9816719D1474A41374A11B6E981A648B
+        185C831C537A1E53751D5473225276224F76214F73214E75
+        1D4E791A4F771B5279164F7C1857831C5F8A1B64911D6794
+        206B9521648E1D5C85214F80244F7A2A4767645268635B6A
+        575562394471294E6929516A1E57751F597E225C821B5C86
+        15648D0C73940C72A20C82B21485AF1A80A81F7DA327719E
+        236C991C659018618C156088166181246487297285296E98
+        2B7AA5287AA9277CA51C7CA4197CA52074A01A69921A5B85
+        1C537A1E53751F537A24528330627D607066D1825BEB876F
+        F69E78F49462FE8057FF7F45F67B42BC6E3D9E4F2E5D4D4E
+        34445B22516F1E5C812165881F628C24638F2A668822567E
+        22497422486F234B6E234B6E2D4B6D37567550556B585F71
+        5563863D7EA83680A52F6B9D366B97276D8F256A931B6999
+        1C709E1577A6167AAB177CAA197DAE1A85B11986B12085B3
+        1F85B5248ABB2E8EC0218EB71B8AB70F85AD078A9E1277A3
+        1477A01D6E9B1B68921A618B1C5B871C56841F547E1C587D
+        195D80155A83165E84155F86116186006178185979175773
+        165672185373254F775169738B6656CE7A58F68452F58748
+        FE8D3FFF9543FF9A48F89144E58940AA72576A565753535F
+        204B6B1E4E741F4F732C567E225276224F766F65649D645B
+        D1845AF3924DFC954AFB9452F69257D98159B65B409C4F49
+        5A4F572E4A62244964194F69174E6D154B6D1D4A6B244669
+        383E6E69526291645FBF615FE37868FA8057FA8E5FEE8160
+        B76452855A5167485A455263284D67274B6B274867284766
+        2F42622B3E5C16202231302B582C2B642820825538744B47
+        5A43572E41612741622047681D4B6C1F4D6F1B4F741A5074
+        165277155176194F751D4C6A2245632A445D435837562F34
       </palette>
     </flame>
   </meta>
