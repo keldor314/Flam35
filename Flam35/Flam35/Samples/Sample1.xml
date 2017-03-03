@@ -1,5 +1,4 @@
 ﻿<Flam35>
-  <include file=""/>
   <animation duration="1">
     <keyframe id="keyframe1" flame="flame1" time="0"/>
     <keyframe id="keyframe2" flame="flame2" time="1"/>
@@ -13,6 +12,11 @@
     <transition start="keyframe1" stop="keyframe2" type="2D"> <!--Implicitly match members by name, may be overridden.  Child overrides take priority over parrent overrides.  Unmatched members are linked to the identity-->
       <interpolation coordinateSystem="linear">
         <cubic s0="0" s1="0"/>
+        <nodes>
+          <link start="node1" stop="node1"/>
+          <link start="node2" stop="node2"/>
+          <line start="finalnode" stop="finalnode"/>
+        </nodes>
       </interpolation>
     </transition>
   </animation>
@@ -125,9 +129,9 @@
           <node4pre weight="5"/>
         </continue>
       </node6>
-      <finalNode transformation="finalxform" opacity="base">
+      <finalnode transformation="finalxform" opacity="base">
         <return state="base"/>
-      </finalNode>
+      </finalnode>
     </nodes>
     <transformations>
       <xform1>
@@ -200,7 +204,7 @@
           <blur_pixelize weight="1" size="0.1" scale="0.9"/>
         </vars>
       </xform6>
-      <finalXform>
+      <finalxform>
         <affine type="2D affine">
           -0.702026 -0.941568 0
           0.941568  -0.702026 0
@@ -208,15 +212,24 @@
         <vars>
           <bipolar weight="2" shift="1"/>
         </vars>
-      </finalXform>
+      </finalxform>
     </transformations>
     <postProcess>
       <densityEstimation type="default"/>
       <toneMap brightness="10" gamma="4" vibrancy="1"/>
     </postProcess>
     <code>
-      <var name="" parameters=""/>
-      <var name="" parameters=""/>
+      <var name="blur_pixelize" parameters="size scale">
+        float size = fmaxf(parameters.size,1e6f);
+        float xfix = input.x/size;
+        float xfix = input.y/size;
+        float x = floorf(xfix);
+        float y = floorf(yfix);
+        xfix = parameters.scale*(x-xfix+1.0f);
+        yfix = parameters.scale*(y-yfix+1.0f);
+        output.x = x + xfix*(randFloat()-0.5f) + 0.5f;
+        output.y = y + yfix*(randFloat()-0.5f) + 0.5f;
+      </var>
     </code>
     <palette format="plaintextRGB" normalized="false">
       227 135 221     223 124 218     223 121 196     223 117 174     225 111 172     227 105 170     222 124 165     215 133 159
@@ -356,10 +369,50 @@
     </palette>
   </flame>
   <code>
-    <var name="" parameters=""/>
-    <var name="" parameters=""/>
+    <var name="splits" parameters="x y">
+      output.x = input.x + parameters.x * copysignf(1.0f,input.x);
+      output.y = input.y + parameters.y * copysignf(1.0f,input.y);
+    </var>
+    <var name="gaussian_blur" parameters="">
+      float rn1;
+      rn1 = randFloat() + randFloat() + randFloat() + randFloat() -2.0f;
+      float rn2;
+      rn2 = randFloat();
+      output.x = rn1 * cosf(2.0f * PI * rn2);
+      output.y = rn1 * sinf(2.0f * PI * rn2);
+    </var>
+    <var name="cylinder" parameters="">
+      output.x = sinf(input.x);
+      output.f = input.y;
+    </var>
+    <var name="spherical" parameters="">
+      float x = input.x;
+      float y = input.y;
+      output.x = x/(x*x+y*y);
+      output.y = y/(x*x+y*y);
+    </var>
+    <var name="bubble" parameters="">
+      float x = input.x;
+      float y = input.y;
+      float r2D2 = x*x+y*y;
+      output.x = (4.0f / (r2D2 + 4.0f)) * x;
+      output.y = (4.0f / (r2D2 + 4.0f)) * y;
+    </var>
+    <var name="bipolar" parameters="shift">
+      float x = input.x;
+      float y = input.y;
+      float r2D2 = x*x+y*y;
+      float y0 = 0.5f * atan2f(2.0f * y, r2D2-1.0f) - 0.5f * PI * parameters.shift;
+      if (y0 > 0.5f*PI)
+        y0 = -0.5f * PI + fmodf(y0 + 0.5f * PI, PI);
+      else if (-0.5f*PI > y0)
+        y0 = 0.5f*PI - fmodf(0.5f * PI - y0, PI);
+      output.x = logf((r2D2+1.0f + 2.0f * x) / (r2D2+1.0f - 2.0f * x)) * 0.5f / PI;
+      output.y = y0 * 2.0f / PI;
+    </var>
   </code>
   <meta>  <!--meta is ignored by the parser.  Use for embedding information.-->
+    <source>http://phoenixkeyblack.deviantart.com/art/Assertively-Green-119776630</source>
     <flame name="smoothness Mosaic 2.3" version="Apophysis 2.08 beta 2" size="2560 2048" center="0 0" scale="640" angle="1.5707963267949" rotate="-90.0000000000002" oversample="1" filter="0.5" quality="50" background="0 0 0" brightness="10" gamma="4" >
       <xform weight="100" color="0.7" symmetry="0.937" splits="1" coefs="0.895958 0.341487 -0.341487 0.895958 0 0" splits_x="0" splits_y="0.1" chaos="1 0 1 1 0 0 " />
       <xform weight="100" color="0.738" symmetry="0.95" splits="1" coefs="1 0 0 1 0 0" splits_x="0" splits_y="0.1" chaos="0 1 1 1 0 0 " plotmode="off" />
@@ -403,6 +456,7 @@
         CD91BECD97C4CC9CC9D7A5DAE1AEEBE6B0E0E3A9DAE691E0
       </palette>
     </flame>
+    <source>http://eralex61.deviantart.com/art/Impossible-Sphere-58452045</source>
     <flame name="ImpossibleSphere" version="Apophysis 2.08 JK" size="800 800" center="-0.0270833333333333 0.0039583333333304" scale="320" oversample="1" filter="0.5" quality="50" background="0 0 0" brightness="4" gamma="3" >
       <xform weight="0.5" color="0" spherical="1" coefs="1 0 0 1 0 0" />
       <xform weight="0.5" color="0.052" spherical="0.25" coefs="-0.975334 -0.17621 0.17621 -0.975332 -0.151573 0.134938" />
