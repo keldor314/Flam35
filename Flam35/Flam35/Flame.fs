@@ -2,8 +2,8 @@
 
 
 type linkable<'T> =
-|Direct     of 'T
-|Indirect   of state:string
+| Direct     of 'T
+| Indirect   of state:string
 
 type varCode = {
     parameters  : string []
@@ -17,8 +17,8 @@ type var = {
 }
 
 type affine = 
-|Affine2D of matrix:float32[,] * offset:float32[]
-|Affine3D of matrix:float32[,] * offset:float32[]
+| Affine2D of matrix:float32[,] * offset:float32[]
+| Affine3D of matrix:float32[,] * offset:float32[]
 
 type transformation = {
     affine  : affine option
@@ -54,13 +54,8 @@ type gamut = {
     vibrancy    : float32
 }
 
-type postProcess = {
-    doDensityEstimation : bool
-    gamut               : gamut
-}
-
 type flame = {
-    postProcess     : postProcess
+    gamut           : gamut
     camera          : camera
     nodes           : Map<string,node>
     transformations : Map<string,transformation>

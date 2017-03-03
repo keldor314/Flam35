@@ -210,7 +210,6 @@
       </finalxform>
     </transformations>
     <postProcess>
-      <densityEstimation type="default"/>
       <toneMap brightness="10" gamma="4" vibrancy="1"/>
     </postProcess>
     <code>
@@ -324,7 +323,6 @@
       </finalxform>
     </transformaitons>
     <postProcess>
-      <densityEstimation type="default"/>
       <toneMap brightness ="4" gamma="3" vibrancy="1"/>
     </postProcess>
     <palette format="plaintextRGB" normalized="false">
