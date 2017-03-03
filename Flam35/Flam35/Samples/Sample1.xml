@@ -12,11 +12,6 @@
     <transition start="keyframe1" stop="keyframe2" type="2D"> <!--Implicitly match members by name, may be overridden.  Child overrides take priority over parrent overrides.  Unmatched members are linked to the identity-->
       <interpolation coordinateSystem="linear">
         <cubic s0="0" s1="0"/>
-        <nodes>
-          <link start="node1" stop="node1"/>
-          <link start="node2" stop="node2"/>
-          <line start="finalnode" stop="finalnode"/>
-        </nodes>
       </interpolation>
     </transition>
   </animation>
@@ -38,7 +33,7 @@
           <node1 weight="100"/>
           <node3pre weight="5"/>
           <node4pre weight="5"/>
-        </continue>"
+        </continue>
       </node1>
       <node2 transformation="xform2" opacity="0" colorIndex="0.738" colorSpeed="0.025">
         <state>
@@ -80,7 +75,7 @@
       </node3post>
       <node4pre transformation="xform3pre" opacity="0">
         <noPool>
-          <node4/>>
+          <node4/>
         </noPool>
       </node4pre>
       <node4 transformation="xform" opacity="0">
@@ -332,7 +327,6 @@
       <densityEstimation type="default"/>
       <toneMap brightness ="4" gamma="3" vibrancy="1"/>
     </postProcess>
-    <code></code>
     <palette format="plaintextRGB" normalized="false">
       141 75  40      160 81  51      192 113 47      240 130 51      244 139 58      255 140 47      255 138 59      254 129 62
       254 129 62      252 127 63      250 114 66      250 119 67      252 128 76      250 131 73      247 131 72      245 130 65
