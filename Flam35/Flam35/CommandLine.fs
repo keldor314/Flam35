@@ -17,28 +17,28 @@ Options:
 "
 
 type frame =
-    | FrameTime of float
-    | FrameTimeNormalized of float
-    | KeyFrame of int
+| FrameTime of float
+| FrameTimeNormalized of float
+| KeyFrame of int
 
 type command =
-    | RenderFrame of
-        input       : string *
-        output      : string *
-        frame       : frame
-    | RenderAnimation of
-        input       : string *
-        output      : string *
-        frameCount  : int *
-        startTime   : float *
-        stopTime    : float
-    | Convert of
-        input       : string *
-        output      : string
+| RenderFrame of
+    input       : string *
+    output      : string *
+    frame       : frame
+| RenderAnimation of
+    input       : string *
+    output      : string *
+    frameCount  : int *
+    startTime   : float *
+    stopTime    : float
+| Convert of
+    input       : string *
+    output      : string
 
 type deviceList =
-    | All 
-    | Indices of int list
+| All 
+| Indices of int list
 
 type commands = {
     commands    : command list

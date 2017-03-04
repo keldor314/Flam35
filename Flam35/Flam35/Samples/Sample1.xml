@@ -4,13 +4,13 @@
     <keyframe id="keyframe2" flame="flame2" time="1"/>
     <transition start="keyframe1" stop="keyframe2">
       <camera type="2D">
-        <interpolation coordinateSystem="linear">
+        <interpolation coordinateSystem="cartesian">
           <cubic s0="0" s1="0"/>
         </interpolation>
       </camera>
     </transition>
     <transition start="keyframe1" stop="keyframe2" type="2D"> <!--Implicitly match members by name, may be overridden.  Child overrides take priority over parrent overrides.  Unmatched members are linked to the identity-->
-      <interpolation coordinateSystem="linear">
+      <interpolation coordinateSystem="cartesian">
         <cubic s0="0" s1="0"/>
       </interpolation>
     </transition>
