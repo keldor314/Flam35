@@ -22,13 +22,13 @@
     <nodes>
       <node1 transformation="xform1" opacity="0" colorIndex="0.7" colorSpeed="0.0315">
         <state>
-          <store slot="base">
+          <set slot="base">
             <opacity value="1"/>
-          </store>
+          </set>
         </state>
-        <noPool>
+        <targets>
           <finalNode/>
-        </noPool>
+        </targets>
         <continue>
           <node1 weight="100"/>
           <node3pre weight="5"/>
@@ -37,13 +37,13 @@
       </node1>
       <node2 transformation="xform2" opacity="0" colorIndex="0.738" colorSpeed="0.025">
         <state>
-          <store slot="base">
+          <set slot="base">
             <opacity value="0"/>
-          </store>
+          </set>
         </state>
-        <noPool>
+        <targets>
           <finalNode/>
-        </noPool>
+        </targets>
         <continue>
           <node2 weight="100"/>
           <node3pre weight="5"/>
@@ -62,13 +62,13 @@
       </node3>
       <node3post transformation="xform3Post" opacity="0" colorIndex="0.575" colorSpeed="0.5">
         <state>
-          <store slot="base">
+          <set slot="base">
             <opacity value="0"/>
-          </store>
+          </set>
         </state>
-        <noPool>
+        <targets>
           <finalNode/>
-        </noPool>
+        </targets>
         <continue>
           <node6/>
         </continue>
@@ -85,39 +85,39 @@
       </node4>
       <node4post transformation="xform4post" opacity="0" colorIndex="0.575" colorSpeed="0.5">
         <state>
-          <store slot="base">
+          <set slot="base">
             <opacity value="0"/>
-          </store>
+          </set>
         </state>
-        <noPool>
+        <targets>
           <finalNode/>
-        </noPool>
+        </targets>
         <continue>
           <node5/>
         </continue>
       </node4post>
       <node5 transformation="xform5" opacity="0" colorIndex="0.0" colorSpeed="0.0">
         <state>
-          <store slot="base">
+          <set slot="base">
             <opacity value="0"/>
-          </store>
+          </set>
         </state>
-        <noPool>
+        <targets>
           <finalNode/>
-        </noPool>
+        </targets>
         <continue>
           <xform3/>
         </continue>
       </node5>
       <node6 transformation="xform6" opacity="0" colorIndex="0.974" colorSpeed="0.0">
         <state>
-          <store slot="base">
+          <set slot="base">
             <opacity value="1"/>
-          </store>
+          </set>
         </state>
-        <noPool>
+        <targets>
           <finalNode/>
-        </noPool>
+        </targets>
         <continue>
           <node1 weight="100"/>
           <node2 weight="100"/>
@@ -125,6 +125,9 @@
         </continue>
       </node6>
       <finalnode transformation="finalxform" opacity="base">
+        <state>
+          <enter slot="final"/>
+        </state>
         <return state="base"/>
       </finalnode>
     </nodes>
@@ -267,13 +270,13 @@
     <nodes>
       <node1 transformaiton="xform1" opacity="0" colorIndex="0" colorSpeed=".5">
         <state>
-          <store slot="base">
+          <set slot="base">
             <opacity value="1"/>
-          </store>
+          </set>
         </state>
-        <noPool>
+        <targets>
           <finalNode/>>
-        </noPool>
+        </targets>
         <continue>
           <node1 weight=".5"/>
           <node2 weight=".5"/>
@@ -281,19 +284,22 @@
       </node1>
       <node2 transformation="xform2" opacity="0" colorIndex=".052" colorSpeed=".5">
         <state>
-          <store slot="base">
+          <set slot="base">
             <opacity value="1"/>
-          </store>
+          </set>
         </state>
-        <noPool>
+        <targets>
           <finalNode/>>
-        </noPool>
+        </targets>
         <continue>
           <node1 weight=".5"/>
           <node2 weight=".5"/>
         </continue>
       </node2>
       <finalnode transformation="finalxform" opacity="base">
+        <state>
+          <enter slot="final"/>
+        </state>
         <return state="base"/>
       </finalnode>
     </nodes>
