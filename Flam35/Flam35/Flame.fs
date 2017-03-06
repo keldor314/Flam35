@@ -1,9 +1,15 @@
 ﻿module Flame
 
+open MathNet.Numerics.LinearAlgebra
+
+
+type state =
+| Enter of string
+| Leave of string
 
 type linkable<'T> =
 | Direct     of 'T
-| Indirect   of state:string
+| Indirect   of string
 
 type varCode = {
     parameters  : string []
@@ -17,12 +23,12 @@ type var = {
 }
 
 type affine = 
-| Affine2D of matrix:float32[,] * offset:float32[]
-| Affine3D of matrix:float32[,] * offset:float32[]
+| Affine2D of matrix:Matrix<float32> * offset:Vector<float32>
+| Affine3D of matrix:Matrix<float32> * offset:Vector<float32>
 
 type transformation = {
     affine  : affine option
-    vars    : var [] option
+    vars    : var []
 }
 
 type nodeLink = {
@@ -31,12 +37,13 @@ type nodeLink = {
 }
 
 and node = {
+    state       : state
     opacity     : linkable<float32>
     colorIndex  : float32
     colorSpeed  : float32
     targets     : nodeLink []
     usePointPool: bool
-    continuation: nodeLink [] option
+    continuation: nodeLink []
 }
 
 type color = {
@@ -46,7 +53,7 @@ type color = {
 }
 
 type camera =
-| Affine of matrix:float32[,]
+| Affine of float32[,]
 
 type gamut = {
     gamma       : float32
@@ -55,6 +62,7 @@ type gamut = {
 }
 
 type flame = {
+    states          : Set<string>
     nodes           : Map<string,node>
     transformations : Map<string,transformation>
     camera          : camera
@@ -86,7 +94,7 @@ type varLink = {
 
 type transformationLink = {
     affineLink  : affineLink option
-    varLinks    : varLink [] option
+    varLinks    : varLink []
 }
 
 type transitionNodeLink = {
@@ -143,5 +151,10 @@ type cameraTransition = {
 
 type animation = {
     flameSpans : flameTransition []
-    cameraSpans: cameraTransition
+    cameraSpans: cameraTransition []
+}
+
+type flam35 = {
+    animation : animation option
+    flames    : flame []
 }

@@ -87,6 +87,7 @@
     </Content>
     <Compile Include="Environment.fs" />
     <Compile Include="Flame.fs" />
+    <Compile Include="XmlHelper.fs" />
     <Compile Include="LoadFlam35.fs" />
     <Compile Include="CommandLine.fs" />
     <Compile Include="CommandInterpreter.fs" />

@@ -371,7 +371,7 @@
       output.x = input.x + parameters.x * copysignf(1.0f,input.x);
       output.y = input.y + parameters.y * copysignf(1.0f,input.y);
     </var>
-    <var name="gaussian_blur" parameters="">
+    <var name="gaussian_blur">
       float rn1;
       rn1 = randFloat() + randFloat() + randFloat() + randFloat() -2.0f;
       float rn2;
@@ -379,17 +379,17 @@
       output.x = rn1 * cosf(2.0f * PI * rn2);
       output.y = rn1 * sinf(2.0f * PI * rn2);
     </var>
-    <var name="cylinder" parameters="">
+    <var name="cylinder">
       output.x = sinf(input.x);
       output.f = input.y;
     </var>
-    <var name="spherical" parameters="">
+    <var name="spherical">
       float x = input.x;
       float y = input.y;
       output.x = x/(x*x+y*y);
       output.y = y/(x*x+y*y);
     </var>
-    <var name="bubble" parameters="">
+    <var name="bubble">
       float x = input.x;
       float y = input.y;
       float r2D2 = x*x+y*y;
