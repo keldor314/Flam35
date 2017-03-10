@@ -17,7 +17,7 @@
   </animation>
   <flame id="flame1">
     <camera type="2D">
-      <lookAtCircle target="0 0" radius="1.6" up="0 1"/>
+      <lookAtCircle targets="0 0" radius="1.6" up="0 1"/>
     </camera>
     <nodes>
       <node1 transformation="xform1" opacity="0" colorIndex="0.7" colorSpeed="0.0315">
@@ -52,15 +52,15 @@
       </node2>
       <node3pre transformation="xform3pre" opacity="0">
         <noPool/>
-        <target>
+        <targets>
           <node3/>
-        </target>
+        </targets>
       </node3pre>
       <node3 transformation="xform3" opacity="0">
         <noPool/>
-        <target>
+        <targets>
           <node3post/>
-        </target>
+        </targets>
       </node3>
       <node3post transformation="xform3Post" opacity="0" colorIndex="0.575" colorSpeed="0.5">
         <state>
@@ -77,15 +77,15 @@
       </node3post>
       <node4pre transformation="xform3pre" opacity="0">
         <noPool/>
-        <target>
+        <targets>
           <node4/>
-        </target>
+        </targets>
       </node4pre>
       <node4 transformation="xform" opacity="0">
         <noPool/>
-        <target>
+        <targets>
           <node4post/>
-        </target>
+        </targets>
       </node4>
       <node4post transformation="xform4post" opacity="0" colorIndex="0.575" colorSpeed="0.5">
         <state>
@@ -269,7 +269,7 @@
   </flame>
   <flame id="flame2">
     <camera type="2D">
-      <lookAtCircle target="-0.0270833333333333 0.0039583333333304" radius ="1.25" up="0 1"/>
+      <lookAtCircle targets="-0.0270833333333333 0.0039583333333304" radius ="1.25" up="0 1"/>
     </camera>
     <nodes>
       <node1 transformaiton="xform1" opacity="0" colorIndex="0" colorSpeed=".5">
