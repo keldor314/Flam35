@@ -7,7 +7,6 @@ open System.Collections.Generic
 open MathNet.Numerics.LinearAlgebra
 
 open Flame
-open Helper
 open XmlHelper
 
 
@@ -87,15 +86,11 @@ let parseNodeLinks (node:XmlNode) =
 
 let preParseNode (node:XmlNode) =
     let targets = 
-        let poolTargets = node=?>"targets"
-        let noPoolTargets = node=?>"noPool"
-        if poolTargets.IsSome && noPoolTargets.IsSome then failwithf "Node can not have both <target> and <noPool>: <%s>" node.Name
-        if poolTargets.IsNone && noPoolTargets.IsNone then failwithf "Dead end node: <%s>" node.Name
+        let targetsNode = node=?>"targets"
         let targets = 
-            let targets = 
-                which poolTargets noPoolTargets
-                |> parseNodeLinks
-            if poolTargets.IsSome then targets,true else targets,false
+            match targetsNode with
+            | Some targets -> parseNodeLinks targets
+            | None -> failwithf "Dead end node: <%s>" node.Name
         let continuation = 
             match node=?>"continue" with
             | Some node -> Some <| parseNodeLinks node

@@ -51,14 +51,16 @@
         </continue>
       </node2>
       <node3pre transformation="xform3pre" opacity="0">
-        <noPool>
+        <noPool/>
+        <target>
           <node3/>
-        </noPool>
+        </target>
       </node3pre>
       <node3 transformation="xform3" opacity="0">
-        <noPool>
+        <noPool/>
+        <target>
           <node3post/>
-        </noPool>
+        </target>
       </node3>
       <node3post transformation="xform3Post" opacity="0" colorIndex="0.575" colorSpeed="0.5">
         <state>
@@ -74,14 +76,16 @@
         </continue>
       </node3post>
       <node4pre transformation="xform3pre" opacity="0">
-        <noPool>
+        <noPool/>
+        <target>
           <node4/>
-        </noPool>
+        </target>
       </node4pre>
       <node4 transformation="xform" opacity="0">
-        <noPool>
+        <noPool/>
+        <target>
           <node4post/>
-        </noPool>
+        </target>
       </node4>
       <node4post transformation="xform4post" opacity="0" colorIndex="0.575" colorSpeed="0.5">
         <state>
