@@ -85,6 +85,7 @@
     <Content Include="Samples\Sample1.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Compile Include="Helper.fs" />
     <Compile Include="Environment.fs" />
     <Compile Include="Flame.fs" />
     <Compile Include="XmlHelper.fs" />

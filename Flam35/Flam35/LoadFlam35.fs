@@ -7,6 +7,7 @@ open System.Collections.Generic
 open MathNet.Numerics.LinearAlgebra
 
 open Flame
+open Helper
 open XmlHelper
 
 
@@ -50,15 +51,15 @@ let parseAffine (node:XmlNode) =
             |> Array.map (fun i -> Single.Parse i)
         let m = matrix [[coefs.[0]; coefs.[1]]
                         [coefs.[3]; coefs.[4]]]
-        let o = vector [coefs.[2]; coefs.[5]]
+        let o = vector  [coefs.[2]; coefs.[5]]
         Affine2D(m,o)    
     | "3D affine" ->
         let coefs = 
             (node.InnerText, "\W")
             |> Regex.Split
             |> Array.map (fun i -> Single.Parse i)
-        let m = matrix [[coefs.[0]; coefs.[1]; coefs.[2]]
-                        [coefs.[4]; coefs.[5]; coefs.[6]]
+        let m = matrix [[coefs.[0]; coefs.[1]; coefs.[2] ]
+                        [coefs.[4]; coefs.[5]; coefs.[6] ]
                         [coefs.[8]; coefs.[9]; coefs.[10]]]
         let o = vector  [coefs.[3]; coefs.[7]; coefs.[11]]
         Affine3D(m,o)
@@ -75,7 +76,35 @@ let parseTransformation (node:XmlNode) codemaps =
         | None -> [||]
     {affine = affine; vars = vars}
        
+let parseNodeLinks (node:XmlNode) =
+    let targets = node.ChildNodes
+    let mutable links = list.Empty
+    for target in targets do
+        let name = target.Name
+        let weight = target@?>("weight","0.0") |> Single.Parse
+        links <- (name,weight) :: links
+    links
 
+let preParseNode (node:XmlNode) =
+    let targets = 
+        let poolTargets = node=?>"targets"
+        let noPoolTargets = node=?>"noPool"
+        if poolTargets.IsSome && noPoolTargets.IsSome then failwithf "Node can not have both <target> and <noPool>: <%s>" node.Name
+        if poolTargets.IsNone && noPoolTargets.IsNone then failwithf "Dead end node: <%s>" node.Name
+        let targets = 
+            let targets = 
+                which poolTargets noPoolTargets
+                |> parseNodeLinks
+            if poolTargets.IsSome then targets,true else targets,false
+        let continuation = 
+            match node=?>"continue" with
+            | Some node -> Some <| parseNodeLinks node
+            | None -> None
+        ()
+    ()
+
+let parseNode (node:XmlNode) (nodeDictionary : Dictionary<string,node>) =
+    ()
 
 let parseFlame node =
     ()

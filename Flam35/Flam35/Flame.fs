@@ -31,19 +31,23 @@ type transformation = {
     vars    : var []
 }
 
-type nodeLink = {
+type nodeTarget =
+| NoPool of nodeLink []
+| Pool   of nodeLink []
+
+and nodeLink = {
     weight  : float32
     target  : node
 }
 
 and node = {
-    state       : state
-    opacity     : linkable<float32>
-    colorIndex  : float32
-    colorSpeed  : float32
-    targets     : nodeLink []
-    usePointPool: bool
-    continuation: nodeLink []
+    state               : state option
+    opacity             : linkable<float32>
+    colorIndex          : float32
+    colorSpeed          : float32
+    mutable targets     : nodeTarget
+    usePointPool        : bool
+    mutable continuation: nodeLink []
 }
 
 type color = {
