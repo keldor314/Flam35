@@ -293,7 +293,7 @@
           </set>
         </state>
         <targets>
-          <finalNode/>>
+          <finalNode/>
         </targets>
         <continue>
           <node1 weight=".5"/>
