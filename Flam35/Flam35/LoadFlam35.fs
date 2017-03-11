@@ -13,7 +13,7 @@ open XmlHelper
 let parseCode (node:XmlNode) =
     let mutable vars = Map.empty
     for node in node==>"var" do
-        let parameters = Regex.Split (node@?>("parameters",""), "\W")
+        let parameters = Regex.Split (node@?=>("parameters",""), "\W")
         let code = node.InnerText
         vars <- vars.Add (node@!>"name", {parameters=parameters; code=code})
     vars
@@ -75,30 +75,56 @@ let parseTransformation (node:XmlNode) codemaps =
         | None -> [||]
     {affine = affine; vars = vars}
        
-let parseNodeLinks (node:XmlNode) =
-    let targets = node.ChildNodes
+let parseNodeLinks (node:XmlNode) (nodeDictionary : Map<string,node>) =
     let mutable links = list.Empty
-    for target in targets do
-        let name = target.Name
-        let weight = target@?>("weight","0.0") |> Single.Parse
-        links <- (name,weight) :: links
+    for target in node.ChildNodes do
+        let node = nodeDictionary.[target.Name]
+        let weight = target@?=>("weight","1.0") |> Single.Parse
+        links <- (weight,node) :: links
     links
 
-let preParseNode (node:XmlNode) =
-    let targets = 
-        let targetsNode = node=?>"targets"
-        let targets = 
-            match targetsNode with
-            | Some targets -> parseNodeLinks targets
-            | None -> failwithf "Dead end node: <%s>" node.Name
-        let continuation = 
-            match node=?>"continue" with
-            | Some node -> Some <| parseNodeLinks node
-            | None -> None
+let parseNodeTargets (node:XmlNode) (nodeDictionary : Map<string,node>) (states : Set<string>)=
+    let mutable states = states
+    let mutable links = list.Empty
+    for target in node.ChildNodes do
+        let newLinks = 
+            match target.Name with
+            | "return" ->
+                let mutable newLinks = list.Empty
+                for target in target.ChildNodes do
+                    states <- states.Add target.Name
+                    let weight = target@?=>("weight","1.0") |> Single.Parse
+                    newLinks <- Return (weight,target.Name) :: newLinks
+                newLinks
+            | _ ->
+                parseNodeLinks target nodeDictionary
+                |> match target.Name with
+                    | "traverse" ->
+                        List.map (fun i -> Traverse i)
+                    | "enter" -> 
+                        states <- states.Add <| target@!>"state"
+                        List.map (fun i -> Enter i)
+                    | "leaveTo" -> 
+                        states <- states.Add <| target@!>"state"
+                        List.map (fun i -> LeaveTo i)
+                    | invalid -> failwithf "Invalid target type: <%s>" invalid
+        links <- links @ newLinks
+    links, states
+
+let parseStates (node:XmlNode) (states: Set<string>) =
+    let mutable states = states
+    for target in node.ChildNodes do
+        let state = target.Name
+
         ()
+
+let preParseNode (node:XmlNode) (transformations:Map<string,transformation>) =
+    let name = node.Name
+    let transformaition = transformations.[node@!>"transformation"]
+
     ()
 
-let parseNode (node:XmlNode) (nodeDictionary : Dictionary<string,node>) =
+let parseNode (node:XmlNode) (nodeDictionary : Map<string,node>) =
     ()
 
 let parseFlame node =

@@ -3,9 +3,8 @@
 open MathNet.Numerics.LinearAlgebra
 
 
-type state =
-| Enter of string
-| Leave of string
+type setState =
+| Opacity of float32 * string
 
 type linkable<'T> =
 | Direct     of 'T
@@ -31,23 +30,21 @@ type transformation = {
     vars    : var []
 }
 
-type nodeTarget =
-| NoPool of nodeLink []
-| Pool   of nodeLink []
-
-and nodeLink = {
-    weight  : float32
-    target  : node
-}
+and nodeTarget = 
+| Traverse  of weight:float32 * target:node
+| Enter     of weight:float32 * target:node
+| Return    of weight:float32 * state:string
+| LeaveTo   of weight:float32 * target:node
 
 and node = {
-    state               : state option
+    transformation      : transformation
+    setStates           : setState []
     opacity             : linkable<float32>
     colorIndex          : float32
     colorSpeed          : float32
-    mutable targets     : nodeTarget
+    mutable targets     : nodeTarget []
     usePointPool        : bool
-    mutable continuation: nodeLink []
+    mutable continuation: nodeTarget []
 }
 
 type color = {
@@ -134,7 +131,7 @@ type paletteLink = {
 type flameLink = {
     start               : flame
     stop                : flame
-    nodeLinks           : nodeLink []
+    stateLinks          : (string * string) []
     transformationLinks : transformationLink []
     cameraLink          : cameraLink
     gamutLink           : gamutLink

@@ -22,117 +22,139 @@
     <nodes>
       <node1 transformation="xform1" opacity="0" colorIndex="0.7" colorSpeed="0.0315">
         <state>
-          <set slot="base">
-            <opacity value="1"/>
-          </set>
+          <base opacity="1"/>
         </state>
         <targets>
-          <finalNode/>
+          <enter state="final">
+            <finalNode/>
+          </enter>
         </targets>
         <continue>
-          <node1 weight="100"/>
-          <node3pre weight="5"/>
-          <node4pre weight="5"/>
+          <traverse>
+            <node1 weight="100"/>
+            <node3pre weight="5"/>
+            <node4pre weight="5"/>
+          </traverse>
         </continue>
       </node1>
       <node2 transformation="xform2" opacity="0" colorIndex="0.738" colorSpeed="0.025">
         <state>
-          <set slot="base">
-            <opacity value="0"/>
-          </set>
+          <base opacity="0"/>
         </state>
         <targets>
-          <finalNode/>
+          <enter state="final">
+            <finalNode/>
+          </enter>
         </targets>
         <continue>
-          <node2 weight="100"/>
-          <node3pre weight="5"/>
-          <node4pre weight="5"/>
+          <traverse>
+            <node2 weight="100"/>
+            <node3pre weight="5"/>
+            <node4pre weight="5"/>
+          </traverse>
         </continue>
       </node2>
       <node3pre transformation="xform3pre" opacity="0">
         <noPool/>
         <targets>
-          <node3/>
+          <traverse>
+            <node3/>
+          </traverse>
         </targets>
       </node3pre>
       <node3 transformation="xform3" opacity="0">
         <noPool/>
         <targets>
-          <node3post/>
+          <traverse>
+            <node3post/>
+          </traverse>
         </targets>
       </node3>
       <node3post transformation="xform3Post" opacity="0" colorIndex="0.575" colorSpeed="0.5">
         <state>
-          <set slot="base">
-            <opacity value="0"/>
-          </set>
+          <base opacity="0"/>
         </state>
         <targets>
-          <finalNode/>
+          <enter state="final">
+            <finalNode/>
+          </enter>
         </targets>
         <continue>
-          <node6/>
+          <traverse>
+            <node6/>
+          </traverse>
         </continue>
       </node3post>
       <node4pre transformation="xform3pre" opacity="0">
         <noPool/>
         <targets>
-          <node4/>
+          <traverse>
+            <node4/>
+          </traverse>
         </targets>
       </node4pre>
       <node4 transformation="xform" opacity="0">
         <noPool/>
         <targets>
-          <node4post/>
+          <traverse>
+            <node4post/>
+          </traverse>
         </targets>
       </node4>
       <node4post transformation="xform4post" opacity="0" colorIndex="0.575" colorSpeed="0.5">
         <state>
-          <set slot="base">
-            <opacity value="0"/>
-          </set>
+          <base opacity="0"/>
         </state>
         <targets>
-          <finalNode/>
+          <enter state="final">
+            <finalNode/>
+          </enter>
         </targets>
         <continue>
-          <node5/>
+          <traverse>
+            <node5/>
+          </traverse>
         </continue>
       </node4post>
       <node5 transformation="xform5" opacity="0" colorIndex="0.0" colorSpeed="0.0">
         <state>
-          <set slot="base">
-            <opacity value="0"/>
-          </set>
+          <base opacity="0"/>
         </state>
         <targets>
-          <finalNode/>
+          <enter state="final">
+            <finalNode/>
+          </enter>
         </targets>
         <continue>
-          <xform3/>
+          <traverse>
+            <xform3/>
+          </traverse>
         </continue>
       </node5>
       <node6 transformation="xform6" opacity="0" colorIndex="0.974" colorSpeed="0.0">
         <state>
-          <set slot="base">
-            <opacity value="1"/>
-          </set>
+          <base opacity="1"/>
         </state>
         <targets>
-          <finalNode/>
+          <enter state="final">
+            <finalNode/>
+          </enter>
         </targets>
         <continue>
-          <node1 weight="100"/>
-          <node2 weight="100"/>
-          <node4pre weight="5"/>
+          <traverse>
+            <node1 weight="100"/>
+            <node2 weight="100"/>
+            <node4pre weight="5"/>
+          </traverse>
         </continue>
       </node6>
       <finalnode transformation="finalxform" opacity="base">
-        <state>
-          <enter slot="final"/>
-        </state>
-        <return state="base"/>
+        <noPool/>
+        <targets>
+          <return>
+            <base/>
+          </return>
+        </targets>
       </finalnode>
     </nodes>
     <transformations>
@@ -274,37 +296,43 @@
     <nodes>
       <node1 transformaiton="xform1" opacity="0" colorIndex="0" colorSpeed=".5">
         <state>
-          <set slot="base">
-            <opacity value="1"/>
-          </set>
+          <base opacity="1"/>
         </state>
         <targets>
-          <finalNode/>
+          <enter state="final">
+            <finalNode/>
+          </enter>
         </targets>
         <continue>
-          <node1 weight=".5"/>
-          <node2 weight=".5"/>
+          <traverse>
+            <node1 weight=".5"/>
+            <node2 weight=".5"/>
+          </traverse>
         </continue>
       </node1>
       <node2 transformation="xform2" opacity="0" colorIndex=".052" colorSpeed=".5">
         <state>
-          <set slot="base">
-            <opacity value="1"/>
-          </set>
+          <base opacity="1"/>
         </state>
         <targets>
-          <finalNode/>
+          <enter state="final">
+            <finalNode/>
+          </enter>
         </targets>
         <continue>
-          <node1 weight=".5"/>
-          <node2 weight=".5"/>
+          <traverse>
+            <node1 weight=".5"/>
+            <node2 weight=".5"/>
+          </traverse>
         </continue>
       </node2>
       <finalnode transformation="finalxform" opacity="base">
-        <state>
-          <enter slot="final"/>
-        </state>
-        <return state="base"/>
+        <noPool/>
+        <targets>
+          <return>
+            <base/>
+          </return>
+        </targets>
       </finalnode>
     </nodes>
     <transformaitons>
