@@ -8,6 +8,7 @@ open MathNet.Numerics.LinearAlgebra
 
 open Flame
 open XmlHelper
+open FormatHelper
 
 
 let parseCode (node:XmlNode) =
@@ -74,7 +75,7 @@ let parseTransformation (node:XmlNode) codemaps =
         | Some vars -> parseVars vars codemaps
         | None -> [||]
     {affine = affine; vars = vars}
-       
+      
 let parseNodeLinks (node:XmlNode) (nodeDictionary : Map<string,node>) =
     let mutable links = list.Empty
     for target in node.ChildNodes do
@@ -83,6 +84,7 @@ let parseNodeLinks (node:XmlNode) (nodeDictionary : Map<string,node>) =
         links <- (weight,node) :: links
     links
 
+//parse <targets> and <continue>
 let parseNodeTargets (node:XmlNode) (nodeDictionary : Map<string,node>) (states : Set<string>)=
     let mutable states = states
     let mutable links = list.Empty
@@ -111,27 +113,147 @@ let parseNodeTargets (node:XmlNode) (nodeDictionary : Map<string,node>) (states 
         links <- links @ newLinks
     links, states
 
+//parse <state>
 let parseStates (node:XmlNode) (states: Set<string>) =
     let mutable states = states
+    let mutable setStatesList = List.empty
     for target in node.ChildNodes do
         let state = target.Name
+        states <- states.Add state
+        let mutable setStates = List.Empty
+        for attr in node.Attributes do
+            match attr.Name with
+            | "opacity" -> 
+                let opacity = attr.Value |> Single.Parse
+                setStates <- Opacity (opacity, state) :: setStates
+            | name -> failwithf "%s is not a valid state target in <state>" name
+        setStatesList <- setStatesList @ setStates
+    setStatesList, states
 
-        ()
-
-let preParseNode (node:XmlNode) (transformations:Map<string,transformation>) =
+let parseNode (node:XmlNode) (transformations:Map<string,transformation>) (states: Set<string>)=
     let name = node.Name
-    let transformaition = transformations.[node@!>"transformation"]
+    let transformation = transformations.[node@!>"transformation"]
+    let setStates, states = 
+        match node=?>"state" with
+        | Some stateNode ->
+            let stateList, states = parseStates stateNode states
+            Array.ofList stateList, states
+        | None -> [||], states
+    let opacity =
+        let num = ref 0.f
+        let isSingle = Single.TryParse (node@?=>("opacity","0.0"),num)
+        if isSingle then
+            Direct !num
+        else
+            Indirect <| node@!>"opacity"
+    let colorIndex = node@?=>("colorIndex","0.0") |> Single.Parse
+    let colorSpeed = node@?=>("colorSpeed","0.0") |> Single.Parse
+    let targets = Array.empty
+    let usePointPool = not (node=?"noPool")
+    let continuation = Array.empty
+    {
+        transformation = transformation
+        setStates = setStates
+        opacity = opacity
+        colorIndex = colorIndex
+        colorSpeed = colorSpeed
+        targets = targets
+        usePointPool = usePointPool
+        continuation = continuation
+    }, states
 
-    ()
+let linkNode (node:node) (nodeXml:XmlNode) (nodeDictionary : Map<string,node>) (states : Set<string>) =
+    let targets,states = parseNodeTargets (nodeXml=>"targets") nodeDictionary states
+    let continuation,states =
+        match nodeXml=?>"continue" with
+        | Some node ->
+            parseNodeTargets node nodeDictionary states
+        | None -> List.empty, states
+    node.targets <- Array.ofList targets
+    node.continuation <- Array.ofList continuation
+    node, states
 
-let parseNode (node:XmlNode) (nodeDictionary : Map<string,node>) =
-    ()
+let parseCamera (node:XmlNode) =
+    match node.ChildNodes.Count with
+    | 1 -> 
+        let node = node.ChildNodes.[0]
+        let parseLookAt (node:XmlNode) =
+            let target = 
+                (node@!>"target","\W")
+                |> Regex.Split
+                |> Array.map (fun i -> Single.Parse i)
+                |> List.ofArray
+                |> vector
+            let radius = node@!>"radius" |> Single.Parse
+            let offset =
+                (node@!>"offset","\W")
+                |> Regex.Split
+                |> Array.map (fun i -> Single.Parse i)
+                |> List.ofArray
+                |> vector
+            target,radius,offset
+        match node.Name with
+        | "lookAtCircle" -> LookAtCircle <| parseLookAt node
+        | "lookAtSphere" -> LookAtSphere <| parseLookAt node
+        | "affine"       -> Affine       <| parseAffine node
+        | name -> failwithf "Unknown camera type in <camera>: <%s>" name
+    | _ -> failwith "<camera> must have exactly 1 child node"
 
-let parseFlame node =
-    ()
+let parseGamut (node:XmlNode) =
+    {
+        brightness  = node@!>"brightness"           |> Single.Parse
+        gamma       = node@!>"gamma"                |> Single.Parse
+        vibrancy    = node@?=>("vibrancy","1.0")    |> Single.Parse
+    }
 
+let parsePalette (node:XmlNode) =
+    match node@!>"format" with
+    | "RGB plaintext" ->
+        let isNormalized =
+            match node@!>"normalized" with
+            | "true"  -> true
+            | "false" -> false
+            | _ -> failwith "Error in <palette>: normalized attribute must be boolean"
+        (node.InnerText,"\W")
+        |> Regex.Split
+        |> Seq.ofArray
+        |> partitionSeq 3
+        |> Seq.map (fun color ->
+            color
+            |> Array.map (fun colorComponent -> 
+                Single.Parse colorComponent
+                |> (fun colorComponent -> if isNormalized then colorComponent else colorComponent/255.f)
+                )
+            |> (fun color -> {r=color.[0]; g=color.[1]; b=color.[2]} ))
+        |> Array.ofSeq
+    | unknown -> failwithf "Unknown <palette> format: %s" unknown
+
+let parseFlame (node:XmlNode) (code:Map<string,varCode> list) =
+    let code = 
+        match node =?>"code" with
+        | Some codeNode -> 
+            (parseCode codeNode) :: code
+        | None -> code
+    let palette = parsePalette  (node=>"palette")
+    let gamut   = parseGamut    (node=>"gamut")
+    let camera  = parseCamera   (node=>"camera")
+    let transformations =
+        let transformationNodes = (node=>"transformations").ChildNodes
+        let mutable transformations = Map.empty
+        for transformationNode in transformationNodes do
+            let transformation = parseTransformation transformationNode code
+            transformations <- transformations.Add (transformationNode.Name, transformation)
+        transformations
+    let nodes =
+        let xmlNodes = (node=>"nodes").ChildNodes
+        let mutable nodes = Map.empty
+        for node in xmlNodes do
+            ()
+    ()  //INCOMPLETE
+
+//TODO
 let parseAnimation node =
-    ()
+    None
 
 let parseFlameDocument (xml:XmlNode) =
     ()

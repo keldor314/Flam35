@@ -85,9 +85,10 @@
     <Content Include="Samples\Sample1.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Compile Include="FormatHelper.fs" />
+    <Compile Include="XmlHelper.fs" />
     <Compile Include="Environment.fs" />
     <Compile Include="Flame.fs" />
-    <Compile Include="XmlHelper.fs" />
     <Compile Include="LoadFlam35.fs" />
     <Compile Include="CommandLine.fs" />
     <Compile Include="CommandInterpreter.fs" />

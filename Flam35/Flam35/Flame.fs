@@ -22,8 +22,8 @@ type var = {
 }
 
 type affine = 
-| Affine2D of matrix:Matrix<float32> * offset:Vector<float32>
-| Affine3D of matrix:Matrix<float32> * offset:Vector<float32>
+| Affine2D      of matrix:Matrix<float32> * offset:Vector<float32>
+| Affine3D      of matrix:Matrix<float32> * offset:Vector<float32>
 
 type transformation = {
     affine  : affine option
@@ -54,11 +54,14 @@ type color = {
 }
 
 type camera =
-| Affine of float32[,]
+| Affine of affine
+| LookAtCircle  of target:Vector<float32> * radius:float32 * up:Vector<float32>
+| LookAtSphere  of target:Vector<float32> * radius:float32 * up:Vector<float32>
+
 
 type gamut = {
-    gamma       : float32
     brightness  : float32
+    gamma       : float32
     vibrancy    : float32
 }
 
@@ -69,7 +72,7 @@ type flame = {
     camera          : camera
     gamut           : gamut
     palette         : color []
-    code            : Map<string,varCode>
+    code            : Map<string,varCode> list
 }
 
 type coordinateSystem =

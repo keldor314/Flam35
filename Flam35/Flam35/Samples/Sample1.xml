@@ -17,7 +17,7 @@
   </animation>
   <flame id="flame1">
     <camera type="2D">
-      <lookAtCircle targets="0 0" radius="1.6" up="0 1"/>
+      <lookAtCircle target="0 0" radius="1.6" up="0 1"/>
     </camera>
     <nodes>
       <node1 transformation="xform1" opacity="0" colorIndex="0.7" colorSpeed="0.0315">
@@ -238,9 +238,7 @@
         </vars>
       </finalxform>
     </transformations>
-    <postProcess>
-      <toneMap brightness="10" gamma="4" vibrancy="1"/>
-    </postProcess>
+    <gamut brightness="10" gamma="4" vibrancy="1"/>
     <code>
       <var name="blur_pixelize" parameters="size scale">
         float size = fmaxf(parameters.size,1e6f);
@@ -254,7 +252,7 @@
         output.y = y + yfix*(randFloat()-0.5f) + 0.5f;
       </var>
     </code>
-    <palette format="plaintextRGB" normalized="false">
+    <palette format="RGB plaintext" normalized="false">
       227 135 221     223 124 218     223 121 196     223 117 174     225 111 172     227 105 170     222 124 165     215 133 159
       207 141 153     202 157 165     197 173 177     179 185 190     161 197 202     152 181 206     143 166 219     119 162 224
       115 155 224     111 148 224     112 147 230     113 145 235     111 162 232     108 179 228     120 185 231     120 183 221
@@ -291,7 +289,7 @@
   </flame>
   <flame id="flame2">
     <camera type="2D">
-      <lookAtCircle targets="-0.0270833333333333 0.0039583333333304" radius ="1.25" up="0 1"/>
+      <lookAtCircle target="-0.0270833333333333 0.0039583333333304" radius ="1.25" up="0 1"/>
     </camera>
     <nodes>
       <node1 transformaiton="xform1" opacity="0" colorIndex="0" colorSpeed=".5">
@@ -360,10 +358,8 @@
         </vars>
       </finalxform>
     </transformaitons>
-    <postProcess>
-      <toneMap brightness ="4" gamma="3" vibrancy="1"/>
-    </postProcess>
-    <palette format="plaintextRGB" normalized="false">
+    <gamut brightness ="4" gamma="3" vibrancy="1"/>
+    <palette format="RGB plaintext" normalized="false">
       141 75  40      160 81  51      192 113 47      240 130 51      244 139 58      255 140 47      255 138 59      254 129 62
       254 129 62      252 127 63      250 114 66      250 119 67      252 128 76      250 131 73      247 131 72      245 130 65
       248 135 67      255 146 71      253 138 71      246 135 79      240 142 79      185 129 102     125 113 149     74  117 162
