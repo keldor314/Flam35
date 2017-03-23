@@ -33,14 +33,13 @@ let parseVars (node:XmlNode) (codeMaps:(Map<string,varCode> list)) =
     node.ChildNodes.Cast<XmlNode>().ToArray()
     |> Array.map (fun node ->
         let weight,parameters =
-            node.Attributes.Cast<XmlNode>()
-            |> Seq.map (fun parameter ->
+            node.Attributes.Cast<XmlNode>().ToArray()
+            |> Array.map (fun parameter ->
                 let value = parameter.Value |> Single.Parse
                 (parameter.Name,value))
-            |> List.ofSeq
-            |> List.partition (fun (name,_) -> name="weight")
+            |> Array.partition (fun (name,_) -> name="weight")
         let weight = snd weight.[0]
-        let parameters = parameters |> Map.ofList
+        let parameters = parameters |> Map.ofArray
         let code = findCode codeMaps node.Name
         {weight=weight; parameters=parameters; desc=code} )
             
