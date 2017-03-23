@@ -81,12 +81,12 @@ let parseTransformation (node:XmlNode) codemaps =
     {affine = affine; vars = vars}
       
 let parseNodeLinks (node:XmlNode) (nodeDictionary : Map<string,node>) =
-    let mutable links = list.Empty
-    for target in node.ChildNodes do
+    node.ChildNodes.Cast<XmlNode>()
+    |> Seq.map (fun target ->
         let node = nodeDictionary.[target.Name]
         let weight = target@?=>("weight","1.0") |> Single.Parse
-        links <- (weight,node) :: links
-    links
+        (weight,node))
+    |> List.ofSeq
 
 //parse <targets> and <continue>
 let parseNodeTargets (node:XmlNode) (nodeDictionary : Map<string,node>) (states : Set<string>)=
@@ -96,12 +96,12 @@ let parseNodeTargets (node:XmlNode) (nodeDictionary : Map<string,node>) (states 
         let newLinks = 
             match target.Name with
             | "return" ->
-                let mutable newLinks = list.Empty
-                for target in target.ChildNodes do
+                target.ChildNodes.Cast<XmlNode>()
+                |> Seq.map (fun target ->
                     states <- states.Add target.Name
                     let weight = target@?=>("weight","1.0") |> Single.Parse
-                    newLinks <- Return (weight,target.Name) :: newLinks
-                newLinks
+                    Return (weight,target.Name))
+                |> List.ofSeq
             | _ ->
                 parseNodeLinks target nodeDictionary
                 |> match target.Name with
@@ -124,13 +124,15 @@ let parseStates (node:XmlNode) (states: Set<string>) =
     for node in node.ChildNodes do
         let state = node.Name
         states <- states.Add state
-        let mutable setStates = List.Empty
-        for attr in node.Attributes do
-            match attr.Name with
-            | "opacity" -> 
-                let opacity = attr.Value |> Single.Parse
-                setStates <- Opacity (opacity, state) :: setStates
-            | name -> failwithf "%s is not a valid state target in <state>" name
+        let setStates =
+            node.Attributes.Cast<XmlNode>()
+            |> Seq.map (fun attr ->
+                match attr.Name with
+                | "opacity" -> 
+                    let opacity = attr.Value |> Single.Parse
+                    Opacity (opacity, state)
+                | name -> failwithf "%s is not a valid state target in <state>" name)
+            |> List.ofSeq
         setStatesList <- setStatesList @ setStates
     setStatesList, states
 
@@ -241,12 +243,11 @@ let parseFlame (node:XmlNode) (code:Map<string,varCode> list) =
     let gamut   = parseGamut    (node=>"gamut")
     let camera  = parseCamera   (node=>"camera")
     let transformations =
-        let transformationNodes = (node=>"transformations").ChildNodes
-        let mutable transformations = Map.empty
-        for transformationNode in transformationNodes do
+        (node=>"transformations").ChildNodes.Cast<XmlNode>()
+        |> Seq.map (fun transformationNode ->
             let transformation = parseTransformation transformationNode code
-            transformations <- transformations.Add (transformationNode.Name, transformation)
-        transformations
+            (transformationNode.Name, transformation))
+        |> Map.ofSeq
     let mutable states = Set.empty
     let nodes =
         let mutable nodes = Map.empty
@@ -281,13 +282,15 @@ let parseFlameDocument (node:XmlNode) =
         | Some codeNode -> 
             [(parseCode codeNode)]
         | None -> []
-    let mutable flames = List.empty
-    for node in node==>"flame" do
-        flames <- (parseFlame node code)::flames
+    let flames = 
+        (node==>"flame").Cast<XmlNode>()
+        |> Seq.map (fun node ->
+            (parseFlame node code))
+        |> Array.ofSeq
     let animation = parseAnimation node
     {
         animation = animation
-        flames = Array.ofList flames
+        flames = flames
     }
 
 let parseFlames (xml:string) =
