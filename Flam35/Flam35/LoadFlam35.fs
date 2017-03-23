@@ -1,6 +1,7 @@
 ﻿module LoadFlam35
 
 open System
+open System.Linq
 open System.Text.RegularExpressions
 open System.Xml
 open System.Collections.Generic
@@ -12,12 +13,13 @@ open FormatHelper
 
 
 let parseCode (node:XmlNode) =
-    let mutable vars = Map.empty
-    for node in node==>"var" do
-        let parameters = Regex.Split (node@?=>("parameters",""), "\W")
+    (node==>"var").Cast<XmlNode>()
+    |> Seq.map (fun node ->
+        let name = node@!>"name"
+        let parameters = Regex.Split ((node@?=>("parameters","")).Trim(), "\s+") |> Array.filter (fun i -> i.Length<>0)
         let code = node.InnerText
-        vars <- vars.Add (node@!>"name", {parameters=parameters; code=code})
-    vars
+        (node@!>"name", {name=name; parameters=parameters; code=code}))
+    |> Map.ofSeq
 
 let rec findCode (codeMaps:(Map<string,varCode> list)) name =
     match codeMaps with
@@ -28,25 +30,27 @@ let rec findCode (codeMaps:(Map<string,varCode> list)) name =
     | _ -> failwithf "Unable to find code for variation: %s" name
 
 let parseVars (node:XmlNode) (codeMaps:(Map<string,varCode> list)) =
-    let mutable vars = List.Empty
-    for node in node==>"vars" do
-        let mutable weight = 0.f
-        let mutable parameters = Map.empty
-        for parameter in node.Attributes do
-            let value = parameter.Value |> Single.Parse
-            match node.Name with
-            | "weight" -> weight <- value
-            | name -> parameters <- parameters.Add (name, value)
+    node.ChildNodes.Cast<XmlNode>()
+    |> Seq.map (fun node ->
+        let weight,parameters =
+            node.Attributes.Cast<XmlNode>()
+            |> Seq.map (fun parameter ->
+                let value = parameter.Value |> Single.Parse
+                (parameter.Name,value))
+            |> List.ofSeq
+            |> List.partition (fun (name,_) -> name="weight")
+        let weight = snd weight.[0]
+        let parameters = parameters |> Map.ofList
         let code = findCode codeMaps node.Name
-        vars <- {weight=weight; parameters=parameters; desc=code} :: vars
-    vars |> List.rev |> Array.ofList
+        {weight=weight; parameters=parameters; desc=code} )
+    |> Array.ofSeq
             
 let parseAffine (node:XmlNode) =
     let affineType = node@!>"type"
     match affineType with
     | "2D affine" ->
         let coefs = 
-            (node.InnerText, "\W")
+            (node.InnerText.Trim(), "\s+")
             |> Regex.Split
             |> Array.map (fun i -> Single.Parse i)
         let m = matrix [[coefs.[0]; coefs.[1]]
@@ -55,7 +59,7 @@ let parseAffine (node:XmlNode) =
         Affine2D(m,o)    
     | "3D affine" ->
         let coefs = 
-            (node.InnerText, "\W")
+            (node.InnerText.Trim(), "\s+")
             |> Regex.Split
             |> Array.map (fun i -> Single.Parse i)
         let m = matrix [[coefs.[0]; coefs.[1]; coefs.[2] ]
@@ -117,8 +121,8 @@ let parseNodeTargets (node:XmlNode) (nodeDictionary : Map<string,node>) (states 
 let parseStates (node:XmlNode) (states: Set<string>) =
     let mutable states = states
     let mutable setStatesList = List.empty
-    for target in node.ChildNodes do
-        let state = target.Name
+    for node in node.ChildNodes do
+        let state = node.Name
         states <- states.Add state
         let mutable setStates = List.Empty
         for attr in node.Attributes do
@@ -131,7 +135,6 @@ let parseStates (node:XmlNode) (states: Set<string>) =
     setStatesList, states
 
 let parseNode (node:XmlNode) (transformations:Map<string,transformation>) (states: Set<string>)=
-    let name = node.Name
     let transformation = transformations.[node@!>"transformation"]
     let setStates, states = 
         match node=?>"state" with
@@ -171,7 +174,7 @@ let linkNode (node:node) (nodeXml:XmlNode) (nodeDictionary : Map<string,node>) (
         | None -> List.empty, states
     node.targets <- Array.ofList targets
     node.continuation <- Array.ofList continuation
-    node, states
+    states
 
 let parseCamera (node:XmlNode) =
     match node.ChildNodes.Count with
@@ -179,19 +182,19 @@ let parseCamera (node:XmlNode) =
         let node = node.ChildNodes.[0]
         let parseLookAt (node:XmlNode) =
             let target = 
-                (node@!>"target","\W")
+                (node@!>"target".Trim(),"\s+")
                 |> Regex.Split
                 |> Array.map (fun i -> Single.Parse i)
                 |> List.ofArray
                 |> vector
             let radius = node@!>"radius" |> Single.Parse
-            let offset =
-                (node@!>"offset","\W")
+            let up =
+                (node@!>"up".Trim(),"\s+")
                 |> Regex.Split
                 |> Array.map (fun i -> Single.Parse i)
                 |> List.ofArray
                 |> vector
-            target,radius,offset
+            target,radius,up
         match node.Name with
         | "lookAtCircle" -> LookAtCircle <| parseLookAt node
         | "lookAtSphere" -> LookAtSphere <| parseLookAt node
@@ -213,8 +216,8 @@ let parsePalette (node:XmlNode) =
             match node@!>"normalized" with
             | "true"  -> true
             | "false" -> false
-            | _ -> failwith "Error in <palette>: normalized attribute must be boolean"
-        (node.InnerText,"\W")
+            | _ -> failwith "Error in <palette>: normalized attribute must be 'true' or 'false'"
+        (node.InnerText.Trim(),"\s+")
         |> Regex.Split
         |> Seq.ofArray
         |> partitionSeq 3
@@ -244,19 +247,48 @@ let parseFlame (node:XmlNode) (code:Map<string,varCode> list) =
             let transformation = parseTransformation transformationNode code
             transformations <- transformations.Add (transformationNode.Name, transformation)
         transformations
+    let mutable states = Set.empty
     let nodes =
-        let xmlNodes = (node=>"nodes").ChildNodes
         let mutable nodes = Map.empty
-        for node in xmlNodes do
-            ()
-    ()  //INCOMPLETE
+        (node=>"nodes").ChildNodes.Cast<XmlNode>().ToArray()
+        |> Array.map (fun nodeXml ->
+            let name = nodeXml.Name
+            let node,newStates = parseNode nodeXml transformations states
+            nodes <- nodes.Add (name,node)
+            states <- newStates
+            node,nodeXml)
+        |> Array.iter (fun (node,nodeXml) ->
+            let newStates = linkNode node nodeXml nodes states
+            states <- newStates)
+        nodes
+    {
+        states = states
+        nodes = nodes
+        transformations = transformations
+        camera = camera
+        gamut = gamut
+        palette = palette
+        code = code
+    }
 
 //TODO
-let parseAnimation node =
+let parseAnimation (node:XmlNode) =
     None
 
-let parseFlameDocument (xml:XmlNode) =
-    ()
+let parseFlameDocument (node:XmlNode) =
+    let code = 
+        match node =?>"code" with
+        | Some codeNode -> 
+            [(parseCode codeNode)]
+        | None -> []
+    let mutable flames = List.empty
+    for node in node==>"flame" do
+        flames <- (parseFlame node code)::flames
+    let animation = parseAnimation node
+    {
+        animation = animation
+        flames = Array.ofList flames
+    }
 
 let parseFlames (xml:string) =
     let doc = new XmlDocument ()

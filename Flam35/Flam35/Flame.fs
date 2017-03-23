@@ -11,6 +11,7 @@ type linkable<'T> =
 | Indirect   of string
 
 type varCode = {
+    name        : string
     parameters  : string []
     code        : string
 }

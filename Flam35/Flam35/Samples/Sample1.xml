@@ -26,7 +26,7 @@
         </state>
         <targets>
           <enter state="final">
-            <finalNode/>
+            <finalnode/>
           </enter>
         </targets>
         <continue>
@@ -43,7 +43,7 @@
         </state>
         <targets>
           <enter state="final">
-            <finalNode/>
+            <finalnode/>
           </enter>
         </targets>
         <continue>
@@ -70,13 +70,13 @@
           </traverse>
         </targets>
       </node3>
-      <node3post transformation="xform3Post" opacity="0" colorIndex="0.575" colorSpeed="0.5">
+      <node3post transformation="xform3post" opacity="0" colorIndex="0.575" colorSpeed="0.5">
         <state>
           <base opacity="0"/>
         </state>
         <targets>
           <enter state="final">
-            <finalNode/>
+            <finalnode/>
           </enter>
         </targets>
         <continue>
@@ -93,7 +93,7 @@
           </traverse>
         </targets>
       </node4pre>
-      <node4 transformation="xform" opacity="0">
+      <node4 transformation="xform4" opacity="0">
         <noPool/>
         <targets>
           <traverse>
@@ -107,7 +107,7 @@
         </state>
         <targets>
           <enter state="final">
-            <finalNode/>
+            <finalnode/>
           </enter>
         </targets>
         <continue>
@@ -122,12 +122,12 @@
         </state>
         <targets>
           <enter state="final">
-            <finalNode/>
+            <finalnode/>
           </enter>
         </targets>
         <continue>
           <traverse>
-            <xform3/>
+            <node3/>
           </traverse>
         </continue>
       </node5>
@@ -137,7 +137,7 @@
         </state>
         <targets>
           <enter state="final">
-            <finalNode/>
+            <finalnode/>
           </enter>
         </targets>
         <continue>
@@ -292,13 +292,13 @@
       <lookAtCircle target="-0.0270833333333333 0.0039583333333304" radius ="1.25" up="0 1"/>
     </camera>
     <nodes>
-      <node1 transformaiton="xform1" opacity="0" colorIndex="0" colorSpeed=".5">
+      <node1 transformation="xform1" opacity="0" colorIndex="0" colorSpeed=".5">
         <state>
           <base opacity="1"/>
         </state>
         <targets>
           <enter state="final">
-            <finalNode/>
+            <finalnode/>
           </enter>
         </targets>
         <continue>
@@ -314,7 +314,7 @@
         </state>
         <targets>
           <enter state="final">
-            <finalNode/>
+            <finalnode/>
           </enter>
         </targets>
         <continue>
@@ -333,7 +333,7 @@
         </targets>
       </finalnode>
     </nodes>
-    <transformaitons>
+    <transformations>
       <xform1>
         <vars>
           <spherical weight="1"/>
@@ -357,7 +357,7 @@
           <bubble weight="1"/>
         </vars>
       </finalxform>
-    </transformaitons>
+    </transformations>
     <gamut brightness ="4" gamma="3" vibrancy="1"/>
     <palette format="RGB plaintext" normalized="false">
       141 75  40      160 81  51      192 113 47      240 130 51      244 139 58      255 140 47      255 138 59      254 129 62

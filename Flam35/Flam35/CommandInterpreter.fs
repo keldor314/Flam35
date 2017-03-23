@@ -1,5 +1,9 @@
 ﻿module CommandInterpreter
+
+open System.IO
+
 open CommandLine
+open LoadFlam35
 
 let executeCommands commands =
     Environment.quality    <- commands.quality
@@ -14,6 +18,9 @@ let executeCommands commands =
         printfn ""
     for command in commands.commands do
         match command with
-        | RenderFrame (input,output,frameTime) -> ()
+        | RenderFrame (input,output,frame) -> 
+            let inputXml = File.ReadAllText input
+            let flames = parseFlames inputXml
+            ()
         | RenderAnimation (input,output,frameCount,startTime,stopTime) -> ()
         | Convert (input,output) -> ()
