@@ -30,8 +30,8 @@ let rec findCode (codeMaps:(Map<string,varCode> list)) name =
     | _ -> failwithf "Unable to find code for variation: %s" name
 
 let parseVars (node:XmlNode) (codeMaps:(Map<string,varCode> list)) =
-    node.ChildNodes.Cast<XmlNode>()
-    |> Seq.map (fun node ->
+    node.ChildNodes.Cast<XmlNode>().ToArray()
+    |> Array.map (fun node ->
         let weight,parameters =
             node.Attributes.Cast<XmlNode>()
             |> Seq.map (fun parameter ->
@@ -43,7 +43,6 @@ let parseVars (node:XmlNode) (codeMaps:(Map<string,varCode> list)) =
         let parameters = parameters |> Map.ofList
         let code = findCode codeMaps node.Name
         {weight=weight; parameters=parameters; desc=code} )
-    |> Array.ofSeq
             
 let parseAffine (node:XmlNode) =
     let affineType = node@!>"type"
