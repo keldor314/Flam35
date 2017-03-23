@@ -182,14 +182,14 @@ let parseCamera (node:XmlNode) =
         let node = node.ChildNodes.[0]
         let parseLookAt (node:XmlNode) =
             let target = 
-                (node@!>"target".Trim(),"\s+")
+                ((node@!>"target").Trim(),"\s+")
                 |> Regex.Split
                 |> Array.map (fun i -> Single.Parse i)
                 |> List.ofArray
                 |> vector
             let radius = node@!>"radius" |> Single.Parse
             let up =
-                (node@!>"up".Trim(),"\s+")
+                ((node@!>"up").Trim(),"\s+")
                 |> Regex.Split
                 |> Array.map (fun i -> Single.Parse i)
                 |> List.ofArray
