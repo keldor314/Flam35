@@ -87,6 +87,7 @@
     <Compile Include="FormatHelper.fs" />
     <Compile Include="XmlHelper.fs" />
     <Compile Include="Environment.fs" />
+    <Compile Include="Image.fs" />
     <Compile Include="Flame.fs" />
     <Compile Include="LoadFlam35.fs" />
     <Compile Include="CommandLine.fs" />
@@ -112,10 +113,12 @@
       <HintPath>..\packages\ManagedCuda-NVRTC.8.0.13\lib\net45\NVRTC.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tests\Tests.fsproj">
